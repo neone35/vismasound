@@ -58,49 +58,136 @@ android {
     }
 }
 
+
 dependencies {
     // main
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation(Deps.coreKtx)
+    implementation(Deps.lifecycleRuntimeKtx)
+    api(Deps.kotlinxCoroutinesCore)
+    api(Deps.kotlinxCoroutinesAndroid)
+    implementation(Deps.activityKtx)
     // koin
-    implementation("io.insert-koin:koin-android:3.3.2")
+    implementation(Deps.koinAndroid)
     // lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation(Deps.lifecycleViewModelKtx)
     // compose
-    implementation("androidx.activity:activity-compose:1.8.2")
-    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("com.github.skydoves:landscapist-glide:2.2.10")
-    implementation("com.github.skydoves:landscapist-placeholder:2.2.10")
+    implementation(Deps.activityCompose)
+    implementation(Deps.composeBom)
+    implementation(Deps.composeUi)
+    implementation(Deps.composeUiGraphics)
+    implementation(Deps.composeUiToolingPreview)
+    implementation(Deps.composeMaterial3)
+    implementation(Deps.landscapistGlide)
+    implementation(Deps.landscapistPlaceholder)
     // network
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.facebook.stetho:stetho:1.6.0")
-    implementation("com.facebook.stetho:stetho-okhttp3:1.6.0")
+    implementation(Deps.retrofit)
+    implementation(Deps.retrofitConverterGson)
+    implementation(Deps.okhttpLoggingInterceptor)
+    implementation(Deps.stetho)
+    implementation(Deps.stethoOkhttp3)
     // database
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
-    androidTestImplementation("androidx.room:room-testing:2.6.1")
+    implementation(Deps.roomKtx)
+    ksp(Deps.roomCompiler)
+    androidTestImplementation(Deps.roomTesting)
     // Logging
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(Deps.timber)
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-perf-ktx")
+    implementation(Deps.firebaseBom)
+    implementation(Deps.firebaseAnalyticsKtx)
+    implementation(Deps.firebaseCrashlyticsKtx)
+    implementation(Deps.firebasePerfKtx)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    // test
+    testImplementation(Deps.Test.junit)
+    androidTestImplementation(Deps.Test.testExtJunit)
+    androidTestImplementation(Deps.Test.espressoCore)
+    androidTestImplementation(Deps.Test.composeBomTest)
+    androidTestImplementation(Deps.Test.composeUiTestJUnit4)
+    debugImplementation(Deps.Test.composeUiTooling)
+    debugImplementation(Deps.Test.composeUiTestManifest)
+}
+
+object Versions {
+    const val coreKtx = "1.12.0"
+    const val lifecycle = "2.7.0"
+    const val coroutines = "1.7.3"
+    const val activity = "1.8.2"
+    const val koin = "3.3.2"
+    const val compose = "2023.10.01"
+    const val retrofit = "2.9.0"
+    const val okhttp = "4.12.0"
+    const val room = "2.6.1"
+    const val timber = "5.0.1"
+    const val firebaseBom = "32.7.1"
+    const val landscapist = "2.2.10"
+    const val stetho = "1.6.0"
+
+    object Test {
+        const val jUnit = "4.13.2"
+        const val jUnitExt = "1.1.5"
+        const val espressoCore = "1.1.5"
+    }
+}
+
+object Deps {
+    // main
+    const val coreKtx = "androidx.core:core-ktx:${Versions.coreKtx}"
+    const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycle}"
+    const val kotlinxCoroutinesCore =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+    const val kotlinxCoroutinesAndroid =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
+    const val activityKtx = "androidx.activity:activity-ktx:${Versions.activity}"
+
+    // koin
+    const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
+
+    // lifecycle
+    const val lifecycleViewModelKtx =
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+
+    // compose
+    const val activityCompose = "androidx.activity:activity-compose:${Versions.activity}"
+    const val composeBom = "androidx.compose:compose-bom:${Versions.compose}"
+    const val composeUi = "androidx.compose.ui:ui"
+    const val composeUiGraphics = "androidx.compose.ui:ui-graphics"
+    const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview"
+    const val composeMaterial3 = "androidx.compose.material3:material3"
+    const val landscapistGlide = "com.github.skydoves:landscapist-glide:${Versions.landscapist}"
+    const val landscapistPlaceholder =
+        "com.github.skydoves:landscapist-placeholder:${Versions.landscapist}"
+
+    // network
+    const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val retrofitConverterGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+    const val okhttpLoggingInterceptor =
+        "com.squareup.okhttp3:logging-interceptor:${Versions.okhttp}"
+    const val stetho = "com.facebook.stetho:stetho:${Versions.stetho}"
+    const val stethoOkhttp3 = "com.facebook.stetho:stetho-okhttp3:${Versions.stetho}"
+
+    // database
+    const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
+    const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
+    const val roomTesting = "androidx.room:room-testing:${Versions.room}"
+
+    // Logging
+    const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
+
+    // Firebase
+    const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
+    const val firebaseAnalyticsKtx = "com.google.firebase:firebase-analytics-ktx"
+    const val firebaseCrashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"
+    const val firebasePerfKtx = "com.google.firebase:firebase-perf-ktx"
+
+    // test
+    object Test {
+        const val junit = "junit:junit:${Versions.Test.jUnit}"
+        const val testExtJunit = "androidx.test.ext:junit:${Versions.Test.jUnitExt}"
+        const val espressoCore =
+            "androidx.test.espresso:espresso-core:${Versions.Test.espressoCore}"
+        const val composeBomTest = "androidx.compose:compose-bom:${Versions.compose}"
+        const val composeUiTestJUnit4 = "androidx.compose.ui:ui-test-junit4"
+        const val composeUiTooling = "androidx.compose.ui:ui-tooling"
+        const val composeUiTestManifest = "androidx.compose.ui:ui-test-manifest"
+    }
 }
