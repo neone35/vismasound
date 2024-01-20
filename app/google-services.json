@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "407597488694",
+    "project_id": "visma-sound",
+    "storage_bucket": "visma-sound.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407597488694:android:63a96847e88c96d9a35697",
+        "android_client_info": {
+          "package_name": "com.arturmaslov.vismasound"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtyJGDDWSgd_tb0DQgDd8phWDF87tlE_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

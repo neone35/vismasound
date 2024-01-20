@@ -88,11 +88,11 @@ dependencies {
     // database
     implementation(Deps.roomKtx)
     ksp(Deps.roomCompiler)
-    androidTestImplementation(Deps.roomTesting)
+    androidTestImplementation(Deps.Test.roomTesting)
     // Logging
     implementation(Deps.timber)
     // Firebase
-    implementation(Deps.firebaseBom)
+    implementation(platform(Deps.firebaseBomPlatform))
     implementation(Deps.firebaseAnalyticsKtx)
     implementation(Deps.firebaseCrashlyticsKtx)
     implementation(Deps.firebasePerfKtx)
@@ -168,13 +168,12 @@ object Deps {
     // database
     const val roomKtx = "androidx.room:room-ktx:${Versions.room}"
     const val roomCompiler = "androidx.room:room-compiler:${Versions.room}"
-    const val roomTesting = "androidx.room:room-testing:${Versions.room}"
 
     // Logging
     const val timber = "com.jakewharton.timber:timber:${Versions.timber}"
 
     // Firebase
-    const val firebaseBom = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
+    const val firebaseBomPlatform = "com.google.firebase:firebase-bom:${Versions.firebaseBom}"
     const val firebaseAnalyticsKtx = "com.google.firebase:firebase-analytics-ktx"
     const val firebaseCrashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"
     const val firebasePerfKtx = "com.google.firebase:firebase-perf-ktx"
@@ -185,9 +184,14 @@ object Deps {
         const val testExtJunit = "androidx.test.ext:junit:${Versions.Test.jUnitExt}"
         const val espressoCore =
             "androidx.test.espresso:espresso-core:${Versions.Test.espressoCore}"
+
+        // compose
         const val composeBomTest = "androidx.compose:compose-bom:${Versions.compose}"
         const val composeUiTestJUnit4 = "androidx.compose.ui:ui-test-junit4"
         const val composeUiTooling = "androidx.compose.ui:ui-tooling"
         const val composeUiTestManifest = "androidx.compose.ui:ui-test-manifest"
+
+        // database
+        const val roomTesting = "androidx.room:room-testing:${Versions.room}"
     }
 }
