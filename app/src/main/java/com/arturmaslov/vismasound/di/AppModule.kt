@@ -2,10 +2,10 @@ package com.arturmaslov.vismasound.di
 
 import android.content.Context
 import com.arturmaslov.vismasound.BuildConfig
+import com.arturmaslov.vismasound.data.source.remote.Api
+import com.arturmaslov.vismasound.data.source.remote.SoundCloudApiService
 import com.arturmaslov.vismasound.helpers.utils.Constants
 import com.arturmaslov.vismasound.helpers.utils.NetworkChecker
-import com.arturmaslov.vismasound.source.remote.Api
-import com.arturmaslov.vismasound.source.remote.SoundCloudApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext

@@ -1,6 +1,6 @@
-package com.arturmaslov.vismasound.source.remote
+package com.arturmaslov.vismasound.data.source.remote
 
-import com.arturmaslov.vismasound.models.ApiError
+import com.arturmaslov.vismasound.data.models.ApiError
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback

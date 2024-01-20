@@ -9,7 +9,7 @@ val viewModelModule = module {
     viewModel { BaseVM(get()) }
     viewModel {
         MainVM(
-
+            get()
         )
     }
 }

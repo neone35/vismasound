@@ -2,12 +2,12 @@ package com.arturmaslov.vismasound.di
 
 import android.app.Application
 import androidx.room.Room
+import com.arturmaslov.vismasound.data.source.MainRepository
+import com.arturmaslov.vismasound.data.source.local.LocalDataSource
+import com.arturmaslov.vismasound.data.source.local.LocalDatabase
+import com.arturmaslov.vismasound.data.source.remote.Api
+import com.arturmaslov.vismasound.data.source.remote.RemoteDataSource
 import com.arturmaslov.vismasound.helpers.utils.Constants
-import com.arturmaslov.vismasound.source.MainRepository
-import com.arturmaslov.vismasound.source.local.LocalDataSource
-import com.arturmaslov.vismasound.source.local.LocalDatabase
-import com.arturmaslov.vismasound.source.remote.Api
-import com.arturmaslov.vismasound.source.remote.RemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication

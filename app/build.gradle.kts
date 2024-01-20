@@ -24,6 +24,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "soundCloudClientID", "\"0RdMYChUv7WW9mgQsjTHJhyEFEfDym3i\"")
+        buildConfigField("String", "soundCloudClientSecret", "\"GxKfRlNh3ys8gWtniN0OuGbkWoWFDbCA\"")
     }
 
     buildTypes {

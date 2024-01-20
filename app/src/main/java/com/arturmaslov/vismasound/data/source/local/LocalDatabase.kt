@@ -1,4 +1,4 @@
-package com.arturmaslov.vismasound.source.local
+package com.arturmaslov.vismasound.data.source.local
 
 import androidx.room.Dao
 import androidx.room.Database
@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.arturmaslov.vismasound.models.TrackEntity
+import com.arturmaslov.vismasound.data.models.TrackEntity
 
 @Database(
     entities = [

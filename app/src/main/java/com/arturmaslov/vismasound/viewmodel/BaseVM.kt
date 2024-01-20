@@ -3,16 +3,16 @@ package com.arturmaslov.vismasound.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arturmaslov.vismasound.App
+import com.arturmaslov.vismasound.data.source.MainRepository
+import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.helpers.utils.NetworkChecker
-import com.arturmaslov.vismasound.source.MainRepository
-import com.arturmaslov.vismasound.source.remote.LoadStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 open class BaseVM(
-    mainRepo: MainRepository? = null
+    mainRepo: MainRepository? = null // provided by Koin
 ) : ViewModel() {
 
     val remoteResponse = mainRepo?.remoteResponse as SharedFlow<String?>?

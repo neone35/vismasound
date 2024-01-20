@@ -1,4 +1,4 @@
-package com.arturmaslov.vismasound.source.remote
+package com.arturmaslov.vismasound.data.source.remote
 
 /**
  * A generic class that holds a value with its loading status.

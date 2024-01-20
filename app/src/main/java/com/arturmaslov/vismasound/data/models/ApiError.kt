@@ -1,4 +1,4 @@
-package com.arturmaslov.vismasound.models
+package com.arturmaslov.vismasound.data.models
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,10 +1,10 @@
-package com.arturmaslov.vismasound.source
+package com.arturmaslov.vismasound.data.source
 
-import com.arturmaslov.vismasound.models.Track
-import com.arturmaslov.vismasound.source.local.LocalData
-import com.arturmaslov.vismasound.source.local.LocalDataSource
-import com.arturmaslov.vismasound.source.remote.RemoteData
-import com.arturmaslov.vismasound.source.remote.RemoteDataSource
+import com.arturmaslov.vismasound.data.models.Track
+import com.arturmaslov.vismasound.data.source.local.LocalData
+import com.arturmaslov.vismasound.data.source.local.LocalDataSource
+import com.arturmaslov.vismasound.data.source.remote.RemoteData
+import com.arturmaslov.vismasound.data.source.remote.RemoteDataSource
 import timber.log.Timber
 
 class MainRepository(
@@ -31,8 +31,8 @@ class MainRepository(
         return mLocalDataSource.insertTrack(track)
     }
 
-    override suspend fun fetchTrackResponse(): List<Track>? {
-        return mRemoteDataSource.fetchTrackResponse()
+    override suspend fun fetchRemoteTrackList(genre: String): List<Track>? {
+        return mRemoteDataSource.fetchRemoteTrackList(genre)
     }
 
 }

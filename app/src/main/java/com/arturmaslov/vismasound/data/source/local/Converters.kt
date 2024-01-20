@@ -1,4 +1,4 @@
-package com.arturmaslov.vismasound.source.local
+package com.arturmaslov.vismasound.data.source.local
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

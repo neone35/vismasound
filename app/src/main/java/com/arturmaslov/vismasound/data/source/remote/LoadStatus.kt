@@ -1,4 +1,4 @@
-package com.arturmaslov.vismasound.source.remote
+package com.arturmaslov.vismasound.data.source.remote
 
 enum class LoadStatus {
     LOADING,

@@ -7,9 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
 import com.arturmaslov.vismasound.R
+import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.helpers.utils.ActivityHelper
 import com.arturmaslov.vismasound.helpers.utils.ToastUtils
-import com.arturmaslov.vismasound.source.remote.LoadStatus
 import com.arturmaslov.vismasound.ui.compose.MainLayout
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.viewmodel.MainVM
@@ -34,7 +34,12 @@ class MainActivity : ComponentActivity(), ActivityHelper {
             VismaSoundTheme {
                 val loadStatus = mainVM.loadStatus().collectAsState().value
 
-                MainLayout()
+                val genresTrackLists = mainVM.genresTrackLists().collectAsState().value
+                    ?: emptyList()
+
+                MainLayout(
+                    genresTrackLists = genresTrackLists
+                )
             }
         }
     }

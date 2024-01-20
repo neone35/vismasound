@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.net.Uri
 import android.provider.MediaStore
 import com.arturmaslov.vismasound.App
-import com.arturmaslov.vismasound.models.Track
+import com.arturmaslov.vismasound.data.models.Track
 import com.google.gson.Gson
 import java.io.IOException
 import java.text.SimpleDateFormat

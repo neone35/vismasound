@@ -1,8 +1,8 @@
-package com.arturmaslov.vismasound.source.local
+package com.arturmaslov.vismasound.data.source.local
 
-import com.arturmaslov.vismasound.models.Track
-import com.arturmaslov.vismasound.models.toDomainModel
-import com.arturmaslov.vismasound.models.toEntity
+import com.arturmaslov.vismasound.data.models.Track
+import com.arturmaslov.vismasound.data.models.toDomainModel
+import com.arturmaslov.vismasound.data.models.toEntity
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
