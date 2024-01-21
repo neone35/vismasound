@@ -10,6 +10,7 @@ import com.arturmaslov.vismasound.data.usecase.GetRemoteTrackLists
 import com.arturmaslov.vismasound.data.usecase.ManageLocalTracks
 import com.arturmaslov.vismasound.helpers.extensions.formatDuration
 import com.arturmaslov.vismasound.ui.compose.TrackSaveState
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -46,12 +47,17 @@ class MainVM(
         viewModelScope.launch {
             setLoadStatus(LoadStatus.LOADING)
             try {
-                val genreList = getRemoteGenreList.execute()
+                val genreListDeferred = async { getRemoteGenreList.execute() }
+                val genreList = genreListDeferred.await()
+
                 genreList
                     ?.filterNotNull()
                     ?.forEach { genre ->
                         setLoadStatus(LoadStatus.LOADING)
-                        val oneGenreTrackList = getRemoteTrackLists.execute5(genre)
+                        val oneGenreTrackListDeferred =
+                            async { getRemoteTrackLists.execute5(genre) }
+                        val oneGenreTrackList = oneGenreTrackListDeferred.await()
+
                         oneGenreTrackList?.let {
                             val tempGenresTrackLists = genresTrackLists.value
                             tempGenresTrackLists?.put(
