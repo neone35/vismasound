@@ -18,6 +18,10 @@ import com.arturmaslov.vismasound.data.models.TrackEntity
 abstract class LocalDatabase : RoomDatabase() {
     // The associated DAOs for the database
     abstract val trackDao: TrackDao?
+
+    companion object {
+        const val DATABASE_NAME = "VISMA_SOUND_DB"
+    }
 }
 
 @Dao

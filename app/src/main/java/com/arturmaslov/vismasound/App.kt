@@ -3,6 +3,7 @@ package com.arturmaslov.vismasound
 import android.app.Application
 import android.content.Context
 import com.arturmaslov.vismasound.di.appModule
+import com.arturmaslov.vismasound.di.cacheModule
 import com.arturmaslov.vismasound.di.repoModule
 import com.arturmaslov.vismasound.di.useCaseModule
 import com.arturmaslov.vismasound.di.viewModelModule
@@ -31,6 +32,7 @@ class App : Application() {
             modules(
                 listOf(
                     appModule,
+                    cacheModule,
                     repoModule,
                     useCaseModule,
                     viewModelModule

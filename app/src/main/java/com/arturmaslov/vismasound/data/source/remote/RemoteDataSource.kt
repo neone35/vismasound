@@ -1,6 +1,5 @@
 package com.arturmaslov.vismasound.data.source.remote
 
-import com.arturmaslov.vismasound.App
 import com.arturmaslov.vismasound.BuildConfig
 import com.arturmaslov.vismasound.data.models.AccessTokenResponse
 import com.arturmaslov.vismasound.data.models.Track
@@ -8,7 +7,7 @@ import com.arturmaslov.vismasound.data.models.TrackDto
 import com.arturmaslov.vismasound.data.models.toDomainModel
 import com.arturmaslov.vismasound.helpers.extensions.PublishFlow
 import com.arturmaslov.vismasound.helpers.utils.Constants
-import com.arturmaslov.vismasound.helpers.utils.SharedPreferencesManager
+import com.arturmaslov.vismasound.helpers.utils.TokenTimeCacheManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.withContext
@@ -17,7 +16,8 @@ import timber.log.Timber
 
 class RemoteDataSource(
     private val api: Api,
-    private val mDispatcher: CoroutineDispatcher
+    private val mDispatcher: CoroutineDispatcher,
+    private val tokenTimeCacheManager: TokenTimeCacheManager
 ) : RemoteData {
 
     // watched from main thread for toast messages
@@ -45,13 +45,15 @@ class RemoteDataSource(
 //    the Client Credentials Flow: 50 tokens in 12h per app, and 30 tokens in 1h per IP address.
 //    In order to not hit the limit we highly recommend reusing one token between instances of
 //    your service and implementing the Refresh Token flow to renew tokens.
+//    Currently a token lives around 1 hour.
     private suspend fun fetchSaveAndReturnAccessToken(): String =
         withContext(mDispatcher) {
-            Timber.i("Running fetchAndSetAccessToken()")
+            val name = object {}.javaClass.enclosingMethod?.name
+            Timber.i("Running $name")
+
             // get last saved refresh token and check if hour passed because of API limits
-            val sharedPreferencesManager = SharedPreferencesManager(App.getAppContext())
-            val existingRefreshToken = sharedPreferencesManager.retrieveLastRefreshToken()
-            val hourPassed = sharedPreferencesManager.hourPassedSinceSave()
+            val existingRefreshToken = tokenTimeCacheManager.retrieveLastRefreshToken()
+            val hourPassed = tokenTimeCacheManager.checkIfHourPassedSinceSave()
             // make a call
             val call = api.soundCloudApiService.getAccessToken(
                 grantType = if (hourPassed) "client_credentials" else "refresh_token",
@@ -60,24 +62,24 @@ class RemoteDataSource(
                 // null == get new token
                 refreshToken = if (hourPassed) null else existingRefreshToken
             )
-            val name = object {}.javaClass.enclosingMethod?.name
             val resultData: AccessTokenResponse? = checkCallAndReturn(call, name!!)
             val accessToken = resultData?.accessToken ?: Constants.EMPTY_STRING
             val refreshToken = resultData?.refreshToken ?: Constants.EMPTY_STRING
-            sharedPreferencesManager.saveSoundCloudTokenWithTime(refreshToken)
+            tokenTimeCacheManager.saveSoundCloudTokenWithTime(refreshToken)
             accessToken
         }
 
     override suspend fun fetchRemoteTrackList(genre: String): List<Track>? =
         withContext(mDispatcher) {
-            Timber.i("Running fetchRemoteTrackList()")
+            val name = object {}.javaClass.enclosingMethod?.name
+            Timber.i("Running $name")
+
             val accessToken = fetchSaveAndReturnAccessToken()
             val call = api.soundCloudApiService.getTracks(
                 genres = listOf(genre),
                 limit = 200,
                 authorization = "Bearer $accessToken"
             )
-            val name = object {}.javaClass.enclosingMethod?.name
             val resultData: List<TrackDto>? = checkCallAndReturn(call, name!!)
             resultData?.map { it.toDomainModel() }
         }

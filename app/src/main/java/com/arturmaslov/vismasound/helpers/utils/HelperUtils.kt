@@ -7,17 +7,8 @@ import com.arturmaslov.vismasound.App
 import com.arturmaslov.vismasound.data.models.Track
 import com.google.gson.Gson
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 object HelperUtils {
-
-    fun getCurrentDateTime(): String {
-        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault())
-        val calendar = Calendar.getInstance()
-        return dateFormat.format(calendar.time)
-    }
 
     private fun getJsonFileBytes(
         dataList: List<Track?>
