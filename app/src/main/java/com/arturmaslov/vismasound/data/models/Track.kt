@@ -2,6 +2,7 @@ package com.arturmaslov.vismasound.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.arturmaslov.vismasound.ui.compose.TrackSaveState
 import com.google.gson.annotations.SerializedName
 
 data class TrackDto(
@@ -54,7 +55,7 @@ data class TrackEntity(
     val duration: String? = null,
     val playbackCount: String? = null,
     val favoritingsCount: String? = null,
-    val genre: String? = null,
+    val genre: String? = null
 )
 
 data class Track(
@@ -69,6 +70,7 @@ data class Track(
     val playbackCount: String? = null,
     val favoritingsCount: String? = null,
     val genre: String? = null,
+    var saveState: TrackSaveState = TrackSaveState.NOT_SAVED
 )
 
 fun TrackDto.toDomainModel(): Track {

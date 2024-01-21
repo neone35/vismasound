@@ -75,7 +75,16 @@ class MainVM(
             try {
                 val genreTrackList = getRemoteTrackLists.executeMax(genre)
                 genreTrackList?.let {
-                    oneGenreTrackList.value = genreTrackList
+                    val permTrackList = manageLocalTracks.executeGetAll()
+                    val oneGenreListWithUpdatedSaveStates = genreTrackList.map { track ->
+                        track.saveState = when {
+                            tempTrackList.any { it.id == track.id } -> TrackSaveState.TEMPORARY
+                            permTrackList?.any { it.id == track.id } == true -> TrackSaveState.PERMANENT
+                            else -> TrackSaveState.NOT_SAVED
+                        }
+                        track
+                    }
+                    oneGenreTrackList.value = oneGenreListWithUpdatedSaveStates
                 }
                 setLoadStatus(LoadStatus.DONE)
             } catch (e: Exception) {
@@ -95,7 +104,8 @@ class MainVM(
                 // save to temporary
                 val alreadyAdded = tempTrackList.contains(track)
                 if (!alreadyAdded) {
-                    tempTrackList.add(track)
+                    val updatedTrack = track.copy(saveState = TrackSaveState.TEMPORARY)
+                    tempTrackList.add(updatedTrack)
                 }
                 updateTempTrackListLength()
             }
@@ -113,10 +123,13 @@ class MainVM(
             }
 
             TrackSaveState.PERMANENT -> {
-                // delete from permanent
+                // delete from everywhere
+                // changes to NOT_SAVED
                 viewModelScope.launch {
                     manageLocalTracks.deleteOne(track)
                     updatePermTrackListLength()
+                    tempTrackList.removeIf { it.id == track.id }
+                    updateTempTrackListLength()
                 }
             }
         }

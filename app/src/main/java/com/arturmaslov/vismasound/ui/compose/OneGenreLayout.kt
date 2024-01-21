@@ -114,7 +114,7 @@ fun TrackListItem(
         }
 
         // Save icon/checkmark
-        var trackSaveState by remember { mutableStateOf(TrackSaveState.NOT_SAVED) }
+        var trackSaveState by remember { mutableStateOf(track.saveState) }
 
         when (trackSaveState) {
             TrackSaveState.NOT_SAVED -> {
@@ -148,7 +148,7 @@ fun TrackListItem(
                     modifier = Modifier
                         .clickable {
                             onSaveOptionSelected(track, TrackSaveState.PERMANENT)
-                            trackSaveState = TrackSaveState.PERMANENT
+                            trackSaveState = TrackSaveState.NOT_SAVED
                         }
                 )
             }
