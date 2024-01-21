@@ -4,13 +4,22 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.helpers.utils.ActivityHelper
 import com.arturmaslov.vismasound.helpers.utils.ToastUtils
-import com.arturmaslov.vismasound.ui.compose.MainLayout
+import com.arturmaslov.vismasound.ui.compose.BottomStorageMenuBar
+import com.arturmaslov.vismasound.ui.compose.LoadingScreen
+import com.arturmaslov.vismasound.ui.compose.MainMusicGenreScreen
+import com.arturmaslov.vismasound.ui.compose.VismaTopAppBar
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.viewmodel.MainVM
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,11 +44,34 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                 val loadStatus = mainVM.loadStatus().collectAsState().value
 
                 val genresTrackLists = mainVM.genresTrackLists().collectAsState().value
-                    ?: emptyList()
+                    ?: emptyMap()
 
-                MainLayout(
-                    genresTrackLists = genresTrackLists
+                Scaffold(
+                    topBar = {
+                        VismaTopAppBar()
+                    },
+                    content = {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(it),
+                            color = MaterialTheme.colorScheme.background
+                        ) {
+                            LoadingScreen(
+                                showLoading = loadStatus == LoadStatus.LOADING
+                            ) {
+                                MainMusicGenreScreen(
+                                    genresTrackLists = genresTrackLists
+                                )
+                            }
+                        }
+                    },
+                    bottomBar = {
+                        BottomStorageMenuBar()
+                    }
                 )
+
+
             }
         }
     }

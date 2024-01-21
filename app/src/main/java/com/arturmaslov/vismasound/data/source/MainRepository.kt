@@ -31,8 +31,11 @@ class MainRepository(
         return mLocalDataSource.insertTrack(track)
     }
 
-    override suspend fun fetchRemoteTrackList(genre: String): List<Track>? {
-        return mRemoteDataSource.fetchRemoteTrackList(genre)
+    override suspend fun fetchRemoteTrackList(
+        genre: String?,
+        amount: Int?
+    ): List<Track>? {
+        return mRemoteDataSource.fetchRemoteTrackList(genre, amount)
     }
 
 }

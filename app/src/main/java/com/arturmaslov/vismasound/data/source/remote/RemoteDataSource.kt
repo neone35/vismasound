@@ -5,9 +5,9 @@ import com.arturmaslov.vismasound.data.models.AccessTokenResponse
 import com.arturmaslov.vismasound.data.models.Track
 import com.arturmaslov.vismasound.data.models.TrackDto
 import com.arturmaslov.vismasound.data.models.toDomainModel
+import com.arturmaslov.vismasound.helpers.cache.TokenTimeCacheManager
 import com.arturmaslov.vismasound.helpers.extensions.PublishFlow
 import com.arturmaslov.vismasound.helpers.utils.Constants
-import com.arturmaslov.vismasound.helpers.utils.TokenTimeCacheManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.withContext
@@ -56,7 +56,7 @@ class RemoteDataSource(
             val hourPassed = tokenTimeCacheManager.checkIfHourPassedSinceSave()
             // make a call
             val call = api.soundCloudApiService.getAccessToken(
-                grantType = if (hourPassed) "client_credentials" else "refresh_token",
+                grantType = if (hourPassed) CLIENT_CREDENTIALS else REFRESH_TOKEN,
                 clientId = BuildConfig.soundCloudClientID,
                 clientSecret = BuildConfig.soundCloudClientSecret,
                 // null == get new token
@@ -69,24 +69,35 @@ class RemoteDataSource(
             accessToken
         }
 
-    override suspend fun fetchRemoteTrackList(genre: String): List<Track>? =
+    override suspend fun fetchRemoteTrackList(
+        genre: String?,
+        amount: Int?
+    ): List<Track>? =
         withContext(mDispatcher) {
             val name = object {}.javaClass.enclosingMethod?.name
             Timber.i("Running $name")
 
             val accessToken = fetchSaveAndReturnAccessToken()
             val call = api.soundCloudApiService.getTracks(
-                genres = listOf(genre),
-                limit = 200,
+                genres = genre?.let { listOf(genre) },
+                limit = amount ?: SOUNDCLOUD_REQ_LIMIT,
                 authorization = "Bearer $accessToken"
             )
             val resultData: List<TrackDto>? = checkCallAndReturn(call, name!!)
             resultData?.map { it.toDomainModel() }
         }
 
+    companion object {
+        const val SOUNDCLOUD_REQ_LIMIT = 200
+        const val CLIENT_CREDENTIALS = "client_credentials"
+        const val REFRESH_TOKEN = "refresh_token"
+    }
 }
 
 interface RemoteData {
     val remoteResponse: MutableSharedFlow<String?>
-    suspend fun fetchRemoteTrackList(genre: String): List<Track>?
+    suspend fun fetchRemoteTrackList(
+        genre: String?,
+        amount: Int?
+    ): List<Track>?
 }

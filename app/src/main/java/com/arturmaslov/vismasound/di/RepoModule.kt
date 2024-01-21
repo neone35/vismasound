@@ -7,7 +7,7 @@ import com.arturmaslov.vismasound.data.source.local.LocalDataSource
 import com.arturmaslov.vismasound.data.source.local.LocalDatabase
 import com.arturmaslov.vismasound.data.source.remote.Api
 import com.arturmaslov.vismasound.data.source.remote.RemoteDataSource
-import com.arturmaslov.vismasound.helpers.utils.TokenTimeCacheManager
+import com.arturmaslov.vismasound.helpers.cache.TokenTimeCacheManager
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module

@@ -1,10 +1,10 @@
 package com.arturmaslov.vismasound.di
 
 import android.content.Context
+import com.arturmaslov.vismasound.helpers.cache.TokenTimeCache
+import com.arturmaslov.vismasound.helpers.cache.TokenTimeCacheImpl
+import com.arturmaslov.vismasound.helpers.cache.TokenTimeCacheManager
 import com.arturmaslov.vismasound.helpers.utils.Constants
-import com.arturmaslov.vismasound.helpers.utils.TokenTimeCache
-import com.arturmaslov.vismasound.helpers.utils.TokenTimeCacheImpl
-import com.arturmaslov.vismasound.helpers.utils.TokenTimeCacheManager
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named

@@ -22,7 +22,7 @@ interface SoundCloudApiService {
 
     @GET("tracks")
     fun getTracks(
-        @Query("genres") genres: List<String>,
+        @Query("genres") genres: List<String>?,
         @Query("limit") limit: Int,
         @Header("Authorization") authorization: String
     ): Call<List<TrackDto>>

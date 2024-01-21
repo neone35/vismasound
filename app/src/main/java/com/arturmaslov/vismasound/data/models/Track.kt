@@ -36,6 +36,9 @@ data class TrackDto(
     @SerializedName("favoritings_count")
     val favoritingsCount: String? = null,
 
+    @SerializedName("genre")
+    val genre: String? = null,
+
     )
 
 @Entity
@@ -51,6 +54,7 @@ data class TrackEntity(
     val duration: String? = null,
     val playbackCount: String? = null,
     val favoritingsCount: String? = null,
+    val genre: String? = null,
 )
 
 data class Track(
@@ -64,6 +68,7 @@ data class Track(
     val duration: String? = null,
     val playbackCount: String? = null,
     val favoritingsCount: String? = null,
+    val genre: String? = null,
 )
 
 fun TrackDto.toDomainModel(): Track {
@@ -77,7 +82,8 @@ fun TrackDto.toDomainModel(): Track {
         waveformUrl = waveformUrl,
         duration = duration,
         playbackCount = playbackCount,
-        favoritingsCount = favoritingsCount
+        favoritingsCount = favoritingsCount,
+        genre = genre
     )
 }
 
@@ -92,7 +98,8 @@ fun Track.toEntity(): TrackEntity {
         waveformUrl = waveformUrl,
         duration = duration,
         playbackCount = playbackCount,
-        favoritingsCount = favoritingsCount
+        favoritingsCount = favoritingsCount,
+        genre = genre
     )
 }
 
@@ -107,6 +114,7 @@ fun TrackEntity.toDomainModel(): Track {
         waveformUrl = waveformUrl,
         duration = duration,
         playbackCount = playbackCount,
-        favoritingsCount = favoritingsCount
+        favoritingsCount = favoritingsCount,
+        genre = genre
     )
 }
