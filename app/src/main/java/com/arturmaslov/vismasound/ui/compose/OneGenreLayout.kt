@@ -1,6 +1,7 @@
 package com.arturmaslov.vismasound.ui.compose
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.models.Track
+import com.arturmaslov.vismasound.helpers.extensions.formatDuration
 import com.arturmaslov.vismasound.helpers.utils.Constants
 
 @Composable
@@ -42,8 +44,7 @@ fun SongListScreenPreview() {
     OneGenreLayout(
         songList = sampleTracks,
         genre = "Pop",
-        onSaveOptionSelected = { _, _ -> },
-        onSongDeleteClick = {}
+        onSaveOptionSelected = { _, _ -> }
     )
 }
 
@@ -51,8 +52,7 @@ fun SongListScreenPreview() {
 fun OneGenreLayout(
     songList: List<Track>,
     genre: String,
-    onSaveOptionSelected: (Track, TrackSaveState) -> Unit,
-    onSongDeleteClick: (Track) -> Unit
+    onSaveOptionSelected: (Track, TrackSaveState) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -74,7 +74,6 @@ fun OneGenreLayout(
                 TrackListItem(
                     track = track,
                     onSaveOptionSelected = onSaveOptionSelected,
-                    onSongDeleteClick = onSongDeleteClick
                 )
             }
         }
@@ -85,13 +84,13 @@ fun OneGenreLayout(
 fun TrackListItem(
     track: Track,
     onSaveOptionSelected: (Track, TrackSaveState) -> Unit,
-    onSongDeleteClick: (Track) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // Song title
         Text(
@@ -105,11 +104,11 @@ fun TrackListItem(
         // Size and duration
         Column {
             Text(
-                text = "${track.duration}",
+                text = "${track.duration?.formatDuration()}",
                 style = MaterialTheme.typography.bodySmall
             )
             Text(
-                text = "${track.duration}",
+                text = "${track.duration?.formatDuration()}",
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -124,7 +123,7 @@ fun TrackListItem(
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            onSaveOptionSelected(track, TrackSaveState.TEMPORARY)
+                            onSaveOptionSelected(track, TrackSaveState.NOT_SAVED)
                             trackSaveState = TrackSaveState.TEMPORARY
                         }
                 )
@@ -136,7 +135,7 @@ fun TrackListItem(
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            onSaveOptionSelected(track, TrackSaveState.PERMANENT)
+                            onSaveOptionSelected(track, TrackSaveState.TEMPORARY)
                             trackSaveState = TrackSaveState.PERMANENT
                         }
                 )
@@ -148,8 +147,8 @@ fun TrackListItem(
                     contentDescription = null,
                     modifier = Modifier
                         .clickable {
-                            onSongDeleteClick(track)
-                            trackSaveState = TrackSaveState.NOT_SAVED
+                            onSaveOptionSelected(track, TrackSaveState.PERMANENT)
+                            trackSaveState = TrackSaveState.PERMANENT
                         }
                 )
             }

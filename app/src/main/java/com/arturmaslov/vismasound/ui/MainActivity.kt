@@ -91,10 +91,7 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                                                 oneGenreTrackList,
                                                 genre,
                                                 onSaveOptionSelected = { track, saveState ->
-                                                    mainVM.onTrackSaveClick(track, saveState)
-                                                },
-                                                onSongDeleteClick = { track ->
-                                                    mainVM.onTrackDeleteClick(track)
+                                                    mainVM.onTrackSaveStateClick(track, saveState)
                                                 }
                                             )
                                         }
@@ -104,7 +101,15 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                         }
                     },
                     bottomBar = {
-                        BottomStorageMenuBar()
+                        val tempTrackSumDuration =
+                            mainVM.tempTrackListLength().collectAsState().value
+                        val permTrackSumDuration =
+                            mainVM.permTrackListLength().collectAsState().value
+
+                        BottomStorageMenuBar(
+                            tempTrackSumDuration,
+                            permTrackSumDuration
+                        )
                     }
                 )
             }

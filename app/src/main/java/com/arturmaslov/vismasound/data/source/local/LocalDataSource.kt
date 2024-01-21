@@ -32,12 +32,25 @@ class LocalDataSource(
     override suspend fun deleteTracks() =
         withContext(mDispatcher) {
             Timber.i("Running deleteTracks()")
-            val deletedRows = trackDao?.deleteTrack()!!
+            val deletedRows = trackDao?.deleteTracks()
             if (deletedRows != 0) {
                 Timber.i("Success: all local track data deleted")
             } else {
                 Timber.i("Failure: unable to delete local track data")
             }
+            deletedRows
+        }
+
+    override suspend fun deleteTrack(track: Track): Int? =
+        withContext(mDispatcher) {
+            Timber.i("Running deleteTrack()")
+            val deletedRows = track.id?.let { trackDao?.deleteTrack(it) }
+            if (deletedRows != 0) {
+                Timber.i("Success: track with id ${track.id} deleted")
+            } else {
+                Timber.i("Failure: unable to delete local track")
+            }
+            deletedRows
         }
 
     override suspend fun insertTrack(track: Track): Long? =
@@ -47,7 +60,7 @@ class LocalDataSource(
             if (insertedId != null) {
                 Timber.i("Success: track with id ${track.id} inserted")
             } else {
-                Timber.i("Failure: unable to delete local track")
+                Timber.i("Failure: unable to insert local track")
             }
             insertedId
         }
@@ -56,6 +69,7 @@ class LocalDataSource(
 
 interface LocalData {
     suspend fun getLocalTracks(): List<Track>?
-    suspend fun deleteTracks()
+    suspend fun deleteTracks(): Int?
+    suspend fun deleteTrack(track: Track): Int?
     suspend fun insertTrack(track: Track): Long?
 }

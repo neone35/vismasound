@@ -23,8 +23,12 @@ class MainRepository(
         return mLocalDataSource.getLocalTracks()
     }
 
-    override suspend fun deleteTracks() {
+    override suspend fun deleteTracks(): Int? {
         return mLocalDataSource.deleteTracks()
+    }
+
+    override suspend fun deleteTrack(track: Track): Int? {
+        return mLocalDataSource.deleteTrack(track)
     }
 
     override suspend fun insertTrack(track: Track): Long? {

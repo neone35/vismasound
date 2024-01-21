@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.models.Track
+import com.arturmaslov.vismasound.helpers.extensions.formatDuration
 import com.arturmaslov.vismasound.ui.MainActivity
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.ui.theme.seed
@@ -186,19 +187,20 @@ fun TrackCard(track: Track) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = track.duration ?: 0.toString(),
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = track.duration?.formatDuration()
+                            ?: 0.toString(),
+                        style = MaterialTheme.typography.bodySmall
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = track.duration ?: 0.toString(),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = track.duration?.formatDuration()
+                            ?: 0.toString(),
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }

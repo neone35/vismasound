@@ -35,6 +35,10 @@ interface TrackDao {
 
     // returns number of rows affected
     @Query("DELETE FROM trackentity")
-    fun deleteTrack(): Int
+    fun deleteTracks(): Int
+
+    // returns number of rows affected
+    @Query("DELETE FROM trackentity WHERE id = :trackId")
+    fun deleteTrack(trackId: Int): Int
 
 }
