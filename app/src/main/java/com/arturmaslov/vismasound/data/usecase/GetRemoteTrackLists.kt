@@ -7,7 +7,7 @@ class GetRemoteTrackLists(
     private val mainRepo: MainRepository
 ) {
     suspend fun executeMax(genre: String?): List<Track>? {
-        return mainRepo.fetchRemoteTrackList(genre, null)
+        return mainRepo.fetchRemoteTrackList(genre)
     }
 
     suspend fun execute5(genre: String?): List<Track>? {

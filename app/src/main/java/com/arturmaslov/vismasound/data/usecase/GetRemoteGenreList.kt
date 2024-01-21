@@ -6,7 +6,7 @@ class GetRemoteGenreList(
     private val mainRepo: MainRepository
 ) {
     suspend fun execute(): List<String?>? {
-        val trackList = mainRepo.fetchRemoteTrackList(null, null)
+        val trackList = mainRepo.fetchRemoteTrackList(null)
         return trackList
             ?.asSequence()
             ?.distinctBy { it.genre }

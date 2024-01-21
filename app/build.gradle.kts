@@ -82,6 +82,7 @@ dependencies {
     implementation(Deps.composeMaterial3)
     implementation(Deps.landscapistGlide)
     implementation(Deps.landscapistPlaceholder)
+    implementation(Deps.composeNav)
     // network
     implementation(Deps.retrofit)
     implementation(Deps.retrofitConverterGson)
@@ -117,6 +118,7 @@ object Versions {
     const val activity = "1.8.2"
     const val koin = "3.3.2"
     const val compose = "2023.10.01"
+    const val composeNav = "2.7.6"
     const val retrofit = "2.9.0"
     const val okhttp = "4.12.0"
     const val room = "2.6.1"
@@ -159,6 +161,7 @@ object Deps {
     const val landscapistGlide = "com.github.skydoves:landscapist-glide:${Versions.landscapist}"
     const val landscapistPlaceholder =
         "com.github.skydoves:landscapist-placeholder:${Versions.landscapist}"
+    const val composeNav = "androidx.navigation:navigation-compose:${Versions.composeNav}"
 
     // network
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"

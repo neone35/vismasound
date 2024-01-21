@@ -53,14 +53,14 @@ class RemoteDataSource(
 
             // get last saved refresh token and check if hour passed because of API limits
             val existingRefreshToken = tokenTimeCacheManager.retrieveLastRefreshToken()
-            val hourPassed = tokenTimeCacheManager.checkIfHourPassedSinceSave()
+            val timePassed = tokenTimeCacheManager.checkIfHourPassedSinceSave()
             // make a call
             val call = api.soundCloudApiService.getAccessToken(
-                grantType = if (hourPassed) CLIENT_CREDENTIALS else REFRESH_TOKEN,
+                grantType = if (timePassed) CLIENT_CREDENTIALS else REFRESH_TOKEN,
                 clientId = BuildConfig.soundCloudClientID,
                 clientSecret = BuildConfig.soundCloudClientSecret,
                 // null == get new token
-                refreshToken = if (hourPassed) null else existingRefreshToken
+                refreshToken = if (timePassed) null else existingRefreshToken
             )
             val resultData: AccessTokenResponse? = checkCallAndReturn(call, name!!)
             val accessToken = resultData?.accessToken ?: Constants.EMPTY_STRING
@@ -98,6 +98,6 @@ interface RemoteData {
     val remoteResponse: MutableSharedFlow<String?>
     suspend fun fetchRemoteTrackList(
         genre: String?,
-        amount: Int?
+        amount: Int? = null
     ): List<Track>?
 }

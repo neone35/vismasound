@@ -30,8 +30,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.models.Track
+import com.arturmaslov.vismasound.ui.MainActivity
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.ui.theme.seed
 import com.skydoves.landscapist.ImageOptions
@@ -44,7 +46,8 @@ import com.skydoves.landscapist.placeholder.shimmer.ShimmerPlugin
 @Preview(showBackground = true)
 fun PreviewMusicGenreScreen() {
     VismaSoundTheme {
-        MainMusicGenreScreen(
+        MainAllGenreScreen(
+            navController = null,
             genresTrackLists = mapOf(
                 "Rock" to listOf(
                     Track(
@@ -59,14 +62,17 @@ fun PreviewMusicGenreScreen() {
                     Track(),
                     Track()
                 )
-            )
+            ),
+            onSeeAllClick = {}
         )
     }
 }
 
 @Composable
-fun MainMusicGenreScreen(
-    genresTrackLists: Map<String, List<Track>?>?
+fun MainAllGenreScreen(
+    navController: NavController?,
+    genresTrackLists: Map<String, List<Track>?>?,
+    onSeeAllClick: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -78,7 +84,12 @@ fun MainMusicGenreScreen(
         ) {
             genresTrackLists?.forEach { (genreTitle, songs) ->
                 item {
-                    MusicGenreSection(title = genreTitle, songs = songs.orEmpty())
+                    MusicGenreSection(
+                        title = genreTitle,
+                        tracks = songs.orEmpty(),
+                        navController = navController,
+                        onSeeAllClick = onSeeAllClick
+                    )
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
@@ -87,7 +98,12 @@ fun MainMusicGenreScreen(
 }
 
 @Composable
-fun MusicGenreSection(title: String, songs: List<Track>) {
+fun MusicGenreSection(
+    title: String,
+    tracks: List<Track>,
+    navController: NavController?,
+    onSeeAllClick: (String) -> Unit,
+) {
     Column(
         modifier = Modifier
     ) {
@@ -105,12 +121,17 @@ fun MusicGenreSection(title: String, songs: List<Track>) {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Button(
-                onClick = { /* TODO */ }) {
+                onClick = {
+                    onSeeAllClick(title)
+                    navController
+                        ?.navigate(MainActivity.GENRE_SCREEN + "/" + title)
+                }
+            ) {
                 Text("See All")
             }
         }
         LazyRow {
-            itemsIndexed(songs) { index, song ->
+            itemsIndexed(tracks) { index, song ->
                 TrackCard(track = song)
                 Spacer(modifier = Modifier.width(8.dp))
             }

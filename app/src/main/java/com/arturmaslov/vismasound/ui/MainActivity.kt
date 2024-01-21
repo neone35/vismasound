@@ -3,6 +3,7 @@ package com.arturmaslov.vismasound.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,13 +13,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.helpers.utils.ActivityHelper
 import com.arturmaslov.vismasound.helpers.utils.ToastUtils
 import com.arturmaslov.vismasound.ui.compose.BottomStorageMenuBar
 import com.arturmaslov.vismasound.ui.compose.LoadingScreen
-import com.arturmaslov.vismasound.ui.compose.MainMusicGenreScreen
+import com.arturmaslov.vismasound.ui.compose.MainAllGenreScreen
+import com.arturmaslov.vismasound.ui.compose.OneGenreLayout
 import com.arturmaslov.vismasound.ui.compose.VismaTopAppBar
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.viewmodel.MainVM
@@ -40,17 +45,19 @@ class MainActivity : ComponentActivity(), ActivityHelper {
         setListeners()
 
         setContent {
+            val navController = rememberNavController()
+            LocalOnBackPressedDispatcherOwner provides this
+
+            val loadStatus = mainVM.loadStatus().collectAsState().value
+            val genresTrackLists = mainVM.genresTrackLists().collectAsState().value
+                ?: emptyMap()
+
             VismaSoundTheme {
-                val loadStatus = mainVM.loadStatus().collectAsState().value
-
-                val genresTrackLists = mainVM.genresTrackLists().collectAsState().value
-                    ?: emptyMap()
-
                 Scaffold(
                     topBar = {
                         VismaTopAppBar()
                     },
-                    content = {
+                    content = { it ->
                         Surface(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -60,9 +67,39 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                             LoadingScreen(
                                 showLoading = loadStatus == LoadStatus.LOADING
                             ) {
-                                MainMusicGenreScreen(
-                                    genresTrackLists = genresTrackLists
-                                )
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = MAIN_SCREEN
+                                ) {
+                                    composable(MAIN_SCREEN) {
+                                        MainAllGenreScreen(
+                                            genresTrackLists = genresTrackLists,
+                                            navController = navController,
+                                            onSeeAllClick = { genre ->
+                                                mainVM.onSeeAllClicked(genre)
+                                            }
+                                        )
+                                    }
+                                    composable("$GENRE_SCREEN/{genre}") { backStackEntry ->
+                                        val oneGenre = backStackEntry.arguments?.getString("genre")
+                                        oneGenre?.let { genre ->
+                                            val oneGenreTrackList =
+                                                mainVM.oneGenreTrackList().collectAsState().value
+                                                    ?: emptyList()
+
+                                            OneGenreLayout(
+                                                oneGenreTrackList,
+                                                genre,
+                                                onSaveOptionSelected = { track, saveState ->
+                                                    mainVM.onTrackSaveClick(track, saveState)
+                                                },
+                                                onSongDeleteClick = { track ->
+                                                    mainVM.onTrackDeleteClick(track)
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         }
                     },
@@ -70,8 +107,6 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                         BottomStorageMenuBar()
                     }
                 )
-
-
             }
         }
     }
@@ -120,7 +155,13 @@ class MainActivity : ComponentActivity(), ActivityHelper {
 
     private suspend fun observeRepositoryResponse(repoResponseFlow: SharedFlow<String?>) {
         repoResponseFlow.collect {
+            it?.let { remoteRes -> ToastUtils.updateShort(this, remoteRes) }
             Timber.i("observeRepositoryResponse: $it")
         }
+    }
+
+    companion object {
+        const val MAIN_SCREEN = "main_screen"
+        const val GENRE_SCREEN = "genre_screen"
     }
 }

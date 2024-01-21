@@ -28,7 +28,7 @@ data class TrackDto(
     val waveformUrl: String? = null,
 
     @SerializedName("duration")
-    val duration: String? = null,
+    val duration: Long? = null,
 
     @SerializedName("playback_count")
     val playbackCount: String? = null,
@@ -72,6 +72,7 @@ data class Track(
 )
 
 fun TrackDto.toDomainModel(): Track {
+    val formattedDuration = duration?.let { formatDuration(it) }
     return Track(
         id = id,
         title = title,
@@ -80,7 +81,7 @@ fun TrackDto.toDomainModel(): Track {
         streamUrl = streamUrl,
         downloadUrl = downloadUrl,
         waveformUrl = waveformUrl,
-        duration = duration,
+        duration = formattedDuration,
         playbackCount = playbackCount,
         favoritingsCount = favoritingsCount,
         genre = genre
@@ -117,4 +118,16 @@ fun TrackEntity.toDomainModel(): Track {
         favoritingsCount = favoritingsCount,
         genre = genre
     )
+}
+
+fun formatDuration(milliseconds: Long): String {
+    val seconds = milliseconds / 1000
+    val minutes = seconds / 60
+    val remainingSeconds = seconds % 60
+
+    return if (minutes > 0) {
+        "${minutes}min ${remainingSeconds}s"
+    } else {
+        "$remainingSeconds s"
+    }
 }
