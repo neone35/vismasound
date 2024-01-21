@@ -85,6 +85,8 @@ fun TrackListItem(
     track: Track,
     onSaveOptionSelected: (Track, TrackSaveState) -> Unit,
 ) {
+    var trackSaveState by remember { mutableStateOf(track.saveState) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,9 +114,6 @@ fun TrackListItem(
                 style = MaterialTheme.typography.bodySmall
             )
         }
-
-        // Save icon/checkmark
-        var trackSaveState by remember { mutableStateOf(track.saveState) }
 
         when (trackSaveState) {
             TrackSaveState.NOT_SAVED -> {

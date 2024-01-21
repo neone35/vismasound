@@ -1,6 +1,8 @@
 package com.arturmaslov.vismasound.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.arturmaslov.vismasound.App
+import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.models.Track
 import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.data.usecase.GetRemoteGenreList
@@ -23,7 +25,7 @@ class MainVM(
 
     private val genresTrackLists =
         MutableStateFlow<MutableMap<String, List<Track>?>?>(mutableMapOf())
-    private val oneGenreTrackList =
+    private val oneTypeTrackList =
         MutableStateFlow<List<Track>?>(emptyList())
 
     private val tempTrackListLength = MutableStateFlow("0min 0s")
@@ -68,15 +70,27 @@ class MainVM(
         }
     }
 
-    private fun fetchOneGenreTracks(genre: String) {
+    private fun fetchOneGenreTracks(type: String) {
         Timber.i("Running HomeVM fetchOneGenreTracks")
         viewModelScope.launch {
             setLoadStatus(LoadStatus.LOADING)
             try {
-                val genreTrackList = getRemoteTrackLists.executeMax(genre)
-                genreTrackList?.let {
+                val trackList = when (type) {
+                    TEMP_STORAGE -> {
+                        tempTrackList
+                    }
+
+                    PERM_STORAGE -> {
+                        manageLocalTracks.executeGetAll()
+                    }
+                    // genre
+                    else -> {
+                        getRemoteTrackLists.executeMax(type)
+                    }
+                }
+                trackList?.let {
                     val permTrackList = manageLocalTracks.executeGetAll()
-                    val oneGenreListWithUpdatedSaveStates = genreTrackList.map { track ->
+                    val oneTypeListWithUpdatedSaveStates = trackList.map { track ->
                         track.saveState = when {
                             tempTrackList.any { it.id == track.id } -> TrackSaveState.TEMPORARY
                             permTrackList?.any { it.id == track.id } == true -> TrackSaveState.PERMANENT
@@ -84,7 +98,7 @@ class MainVM(
                         }
                         track
                     }
-                    oneGenreTrackList.value = oneGenreListWithUpdatedSaveStates
+                    oneTypeTrackList.value = oneTypeListWithUpdatedSaveStates
                 }
                 setLoadStatus(LoadStatus.DONE)
             } catch (e: Exception) {
@@ -156,8 +170,12 @@ class MainVM(
 
 
     fun genresTrackLists() = genresTrackLists as StateFlow<Map<String, List<Track>?>?>
-    fun oneGenreTrackList() = oneGenreTrackList as StateFlow<List<Track>?>
+    fun oneGenreTrackList() = oneTypeTrackList as StateFlow<List<Track>?>
     fun tempTrackListLength() = tempTrackListLength as StateFlow<String>
     fun permTrackListLength() = permTrackListLength as StateFlow<String>
 
+    companion object {
+        val TEMP_STORAGE = App.getAppContext().getString(R.string.temporary_storage)
+        val PERM_STORAGE = App.getAppContext().getString(R.string.permanent_storage)
+    }
 }

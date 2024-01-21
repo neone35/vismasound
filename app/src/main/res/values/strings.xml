@@ -3,4 +3,6 @@
     <string name="no_internet">No internet. Try again later</string>
     <string name="title">Title</string>
     <string name="length">Length</string>
+    <string name="permanent_storage">Permanent Storage</string>
+    <string name="temporary_storage">Temporary Storage</string>
 </resources>

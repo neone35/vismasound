@@ -13,7 +13,7 @@ class TokenTimeCacheManager(
         tokenTimeCache.set(tokenWithTime)
     }
 
-    suspend fun checkIfHourPassedSinceSave(): Boolean {
+    suspend fun checkIfHalfHourPassedSinceSave(): Boolean {
         val lastSaveMillis = tokenTimeCache.get()?.second
 
         return if (lastSaveMillis != null && lastSaveMillis > 0) {
@@ -21,9 +21,9 @@ class TokenTimeCacheManager(
             // Calculate the time difference in milliseconds
             val timeDifference = currentMillis - lastSaveMillis
             // Convert milliseconds to hours
-            val hoursPassed = timeDifference / (1000 * 60 * 60)
+            val minsPassed = timeDifference / (1000 * 60)
             // Check if an hour has passed
-            hoursPassed >= 1
+            minsPassed >= 30
         } else {
             // If there is no last save date, consider an hour has passed
             true

@@ -53,7 +53,7 @@ class RemoteDataSource(
 
             // get last saved refresh token and check if hour passed because of API limits
             val existingRefreshToken = tokenTimeCacheManager.retrieveLastRefreshToken()
-            val timePassed = tokenTimeCacheManager.checkIfHourPassedSinceSave()
+            val timePassed = tokenTimeCacheManager.checkIfHalfHourPassedSinceSave()
             // make a call
             val call = api.soundCloudApiService.getAccessToken(
                 grantType = if (timePassed) CLIENT_CREDENTIALS else REFRESH_TOKEN,

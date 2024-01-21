@@ -51,6 +51,9 @@ class MainActivity : ComponentActivity(), ActivityHelper {
             val loadStatus = mainVM.loadStatus().collectAsState().value
             val genresTrackLists = mainVM.genresTrackLists().collectAsState().value
                 ?: emptyMap()
+            val oneGenreTrackList =
+                mainVM.oneGenreTrackList().collectAsState().value
+                    ?: emptyList()
 
             VismaSoundTheme {
                 Scaffold(
@@ -83,10 +86,6 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                                     composable("$GENRE_SCREEN/{genre}") { backStackEntry ->
                                         val oneGenre = backStackEntry.arguments?.getString("genre")
                                         oneGenre?.let { genre ->
-                                            val oneGenreTrackList =
-                                                mainVM.oneGenreTrackList().collectAsState().value
-                                                    ?: emptyList()
-
                                             OneGenreLayout(
                                                 oneGenreTrackList,
                                                 genre,
@@ -108,7 +107,14 @@ class MainActivity : ComponentActivity(), ActivityHelper {
 
                         BottomStorageMenuBar(
                             tempTrackSumDuration,
-                            permTrackSumDuration
+                            permTrackSumDuration,
+                            tempStorageSelected = {
+                                mainVM.onSeeAllClicked(MainVM.TEMP_STORAGE)
+                            },
+                            permStorageSelected = {
+                                mainVM.onSeeAllClicked(MainVM.PERM_STORAGE)
+                            },
+                            navController = navController
                         )
                     }
                 )

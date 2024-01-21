@@ -11,7 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.arturmaslov.vismasound.R
+import com.arturmaslov.vismasound.ui.MainActivity
+import com.arturmaslov.vismasound.viewmodel.MainVM
 
 @Composable
 @Preview
@@ -19,13 +24,19 @@ fun BottomStorageMenuBarPreview() {
     BottomStorageMenuBar(
         tempTrackSumDuration = "25min 41s",
         permTrackSumDuration = "55min 14s",
+        tempStorageSelected = {},
+        permStorageSelected = {},
+        navController = null
     )
 }
 
 @Composable
 fun BottomStorageMenuBar(
     tempTrackSumDuration: String,
-    permTrackSumDuration: String
+    permTrackSumDuration: String,
+    tempStorageSelected: () -> Unit,
+    permStorageSelected: () -> Unit,
+    navController: NavController?,
 ) {
     BottomAppBar(
         modifier = Modifier
@@ -37,11 +48,15 @@ fun BottomStorageMenuBar(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .weight(1f)
-                .clickable { /* TODO */ }
+                .clickable {
+                    tempStorageSelected()
+                    navController
+                        ?.navigate(MainActivity.GENRE_SCREEN + "/" + MainVM.TEMP_STORAGE)
+                }
                 .fillMaxHeight()
         ) {
             Text(
-                text = "Temporary Storage",
+                text = stringResource(R.string.temporary_storage),
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
@@ -56,11 +71,15 @@ fun BottomStorageMenuBar(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .weight(1f)
-                .clickable { /* TODO */ }
+                .clickable {
+                    permStorageSelected()
+                    navController
+                        ?.navigate(MainActivity.GENRE_SCREEN + "/" + MainVM.PERM_STORAGE)
+                }
                 .fillMaxHeight()
         ) {
             Text(
-                text = "Permanent Storage",
+                text = stringResource(R.string.permanent_storage),
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
