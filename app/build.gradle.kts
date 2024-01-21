@@ -119,6 +119,7 @@ object Versions {
     const val koin = "3.3.2"
     const val compose = "2023.10.01"
     const val composeNav = "2.7.6"
+    const val composeMaterial = "1.1.2"
     const val retrofit = "2.9.0"
     const val okhttp = "4.12.0"
     const val room = "2.6.1"
@@ -130,7 +131,8 @@ object Versions {
     object Test {
         const val jUnit = "4.13.2"
         const val jUnitExt = "1.1.5"
-        const val espressoCore = "1.1.5"
+        const val composeJunit4 = "1.5.4"
+        const val espressoCore = "3.5.1"
     }
 }
 
@@ -157,7 +159,7 @@ object Deps {
     const val composeUi = "androidx.compose.ui:ui"
     const val composeUiGraphics = "androidx.compose.ui:ui-graphics"
     const val composeUiToolingPreview = "androidx.compose.ui:ui-tooling-preview"
-    const val composeMaterial3 = "androidx.compose.material3:material3"
+    const val composeMaterial3 = "androidx.compose.material3:material3:${Versions.composeMaterial}"
     const val landscapistGlide = "com.github.skydoves:landscapist-glide:${Versions.landscapist}"
     const val landscapistPlaceholder =
         "com.github.skydoves:landscapist-placeholder:${Versions.landscapist}"
@@ -193,7 +195,8 @@ object Deps {
 
         // compose
         const val composeBomTest = "androidx.compose:compose-bom:${Versions.compose}"
-        const val composeUiTestJUnit4 = "androidx.compose.ui:ui-test-junit4"
+        const val composeUiTestJUnit4 =
+            "androidx.compose.ui:ui-test-junit4:${Versions.Test.composeJunit4}"
         const val composeUiTooling = "androidx.compose.ui:ui-tooling"
         const val composeUiTestManifest = "androidx.compose.ui:ui-test-manifest"
 
