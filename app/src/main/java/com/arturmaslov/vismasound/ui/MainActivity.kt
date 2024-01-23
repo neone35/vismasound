@@ -10,9 +10,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -83,8 +86,9 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                                             }
                                         )
                                     }
-                                    composable("$GENRE_SCREEN/{genre}") { backStackEntry ->
-                                        val oneGenre = backStackEntry.arguments?.getString("genre")
+                                    composable("$GENRE_SCREEN/{$GENRE_KEY}") { backStackEntry ->
+                                        val oneGenre =
+                                            backStackEntry.arguments?.getString(GENRE_KEY)
                                         oneGenre?.let { genre ->
                                             OneGenreLayout(
                                                 oneGenreTrackList,
@@ -93,6 +97,8 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                                                     mainVM.onTrackSaveStateClick(track, saveState)
                                                 }
                                             )
+
+                                            MainScreenOnBackPressEffect(navController)
                                         }
                                     }
                                 }
@@ -119,6 +125,23 @@ class MainActivity : ComponentActivity(), ActivityHelper {
                     }
                 )
             }
+        }
+    }
+
+    @Composable
+    fun MainScreenOnBackPressEffect(
+        navController: NavController
+    ) {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                navController.navigate(MAIN_SCREEN) {
+                    popUpTo(MAIN_SCREEN) { inclusive = true }
+                }
+            }
+        }
+        DisposableEffect(Unit) {
+            onBackPressedDispatcher.addCallback(callback)
+            onDispose { callback.remove() }
         }
     }
 
@@ -174,5 +197,6 @@ class MainActivity : ComponentActivity(), ActivityHelper {
     companion object {
         const val MAIN_SCREEN = "main_screen"
         const val GENRE_SCREEN = "genre_screen"
+        const val GENRE_KEY = "genre_key"
     }
 }

@@ -41,16 +41,15 @@ class RemoteDataSource(
         }
 
     //    Soundcloud:
-//    Please be aware there is a rate limiting on amount of token you can request through
-//    the Client Credentials Flow: 50 tokens in 12h per app, and 30 tokens in 1h per IP address.
-//    In order to not hit the limit we highly recommend reusing one token between instances of
-//    your service and implementing the Refresh Token flow to renew tokens.
-//    Currently a token lives around 1 hour.
+    //    Please be aware there is a rate limiting on amount of token you can request through
+    //    the Client Credentials Flow: 50 tokens in 12h per app, and 30 tokens in 1h per IP address.
+    //    In order to not hit the limit we highly recommend reusing one token between instances of
+    //    your service and implementing the Refresh Token flow to renew tokens.
+    //    Currently a token lives around 1 hour.
     private suspend fun fetchSaveAndReturnAccessToken(): String =
         withContext(mDispatcher) {
             val name = object {}.javaClass.enclosingMethod?.name
             Timber.i("Running $name")
-
             // get last saved refresh token and check if hour passed because of API limits
             val existingRefreshToken = tokenTimeCacheManager.retrieveLastRefreshToken()
             val timePassed = tokenTimeCacheManager.checkIfHalfHourPassedSinceSave()
