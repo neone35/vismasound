@@ -109,10 +109,10 @@ fun TrackListItem(
                 text = "${track.duration?.formatDuration()}",
                 style = MaterialTheme.typography.bodySmall
             )
-            Text(
+            /*Text(
                 text = "${track.duration?.formatDuration()}",
                 style = MaterialTheme.typography.bodySmall
-            )
+            )*/
         }
 
         when (trackSaveState) {

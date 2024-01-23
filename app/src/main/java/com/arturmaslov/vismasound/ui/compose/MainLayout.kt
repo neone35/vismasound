@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.models.Track
 import com.arturmaslov.vismasound.helpers.extensions.formatDuration
+import com.arturmaslov.vismasound.helpers.utils.Constants
 import com.arturmaslov.vismasound.ui.MainActivity
 import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.ui.theme.seed
@@ -181,8 +182,13 @@ fun TrackCard(track: Track) {
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
+                val trackTitle = track.title
+                    ?.takeIf { it.length >= 20 }
+                    ?.take(20)
+                    ?.plus("...")
+                    ?: track.title
                 Text(
-                    text = (track.title?.take(20) + "..."),
+                    text = trackTitle ?: Constants.EMPTY_STRING,
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -196,12 +202,12 @@ fun TrackCard(track: Track) {
                             ?: 0.toString(),
                         style = MaterialTheme.typography.bodySmall
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    /*Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = track.duration?.formatDuration()
                             ?: 0.toString(),
                         style = MaterialTheme.typography.bodySmall
-                    )
+                    )*/
                 }
             }
         }

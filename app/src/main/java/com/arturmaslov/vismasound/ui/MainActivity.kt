@@ -19,6 +19,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.arturmaslov.vismasound.App
+import com.arturmaslov.vismasound.BuildConfig
 import com.arturmaslov.vismasound.R
 import com.arturmaslov.vismasound.data.source.remote.LoadStatus
 import com.arturmaslov.vismasound.helpers.utils.ActivityHelper
@@ -32,6 +34,7 @@ import com.arturmaslov.vismasound.ui.theme.VismaSoundTheme
 import com.arturmaslov.vismasound.viewmodel.MainVM
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -188,9 +191,13 @@ class MainActivity : ComponentActivity(), ActivityHelper {
     }
 
     private suspend fun observeRepositoryResponse(repoResponseFlow: SharedFlow<String?>) {
-        repoResponseFlow.collect {
-            it?.let { remoteRes -> ToastUtils.updateShort(this, remoteRes) }
-            Timber.i("observeRepositoryResponse: $it")
+        repoResponseFlow.collectLatest { remoteRes ->
+            remoteRes?.let {
+                if (BuildConfig.DEBUG) {
+                    ToastUtils.updateShort(App.getAppContext(), it)
+                    Timber.i("observeRepositoryResponse: $remoteRes")
+                }
+            }
         }
     }
 

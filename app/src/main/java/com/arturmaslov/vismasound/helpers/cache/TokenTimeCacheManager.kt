@@ -23,7 +23,7 @@ class TokenTimeCacheManager(
             // Convert milliseconds to hours
             val minsPassed = timeDifference / (1000 * 60)
             // Check if half hour has passed
-            minsPassed >= 30
+            minsPassed >= 20
         } else {
             // If there is no last save date, consider an time has passed
             true
